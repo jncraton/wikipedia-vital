@@ -7,7 +7,7 @@ vital_article_index = "Wikipedia:Vital_articles"
 api_base = "https://en.wikipedia.org/api/rest_v1/page/mobile-html/"
 
 def get_mobile_html(page):
-  f = urllib.request.urlopen(api_base + page)
+  f = urllib.request.urlopen(urllib.request.Request(api_base + page, headers={'User-Agent': 'wikipedia-vital'}))
   
   return f.read().decode('utf-8')
 
