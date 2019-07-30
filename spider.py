@@ -135,6 +135,9 @@ if __name__ == '__main__':
 
   print(f"Found {len(pages)} pages")
 
+  from time import sleep
+
   for page in pages:
     print(f"Saving {page}...")
     save_content(page, valid_links=pages)
+    sleep(0.1)
