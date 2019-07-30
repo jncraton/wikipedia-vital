@@ -55,6 +55,10 @@ class PageCleaner(HTMLParser):
     role = dict(attrs).get('role','')
     href = dict(attrs).get('href','')
 
+    keep_attrs = ""
+    if cls: keep_attrs += ' class="' + cls +'"'
+    if href and href[2:] in self.valid_links: keep_attrs += ' href="' + href[2:] +'"'
+
     self.is_in_heading = tag in ['h1','h2','h3']
 
     if tag == 'section':
@@ -63,7 +67,7 @@ class PageCleaner(HTMLParser):
         self.sections.append("")
         self.keep_current_section = True
 
-    if tag in ['span']:
+    if tag in ['span'] or (tag == 'a' and not keep_attrs):
       self.tags_skipped.append(tag)
       return
 
@@ -80,10 +84,6 @@ class PageCleaner(HTMLParser):
 
     if not self.inactive_until:
       if tag not in ['base','meta','link']:
-        keep_attrs = ""
-        if cls: keep_attrs += ' class="' + cls +'"'
-        if href and href[2:] in self.valid_links: keep_attrs += ' href="' + href[2:] +'"'
-
         self.sections[-1] += f"<{tag}{keep_attrs}>"
     elif tag == self.inactive_until[-1]:
       del self.inactive_until[-1]
