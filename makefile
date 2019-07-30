@@ -5,6 +5,7 @@ wikipedia-vital.zim: articles zimwriterfs
 
 articles:
 	mkdir -p articles
+	cp logo.png articles/
 	python3 spider.py
 
 zimwriterfs:
