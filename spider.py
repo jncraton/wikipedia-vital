@@ -78,7 +78,7 @@ class PageCleaner(HTMLParser):
       return
 
     if not self.inactive_until:
-      if tag in ['span','div'] or (tag == 'a' and not keep_attrs):
+      if tag in ['span','div', 'section'] or (tag == 'a' and not keep_attrs):
         self.tags_skipped.append(tag)
       elif tag not in ['base','meta','link']:
         self.sections[-1] += f"<{tag}{keep_attrs}>"
