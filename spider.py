@@ -40,6 +40,9 @@ class PageCleaner(HTMLParser):
     self.sections = ["<!DOCTYPE html>"]
     self.inactive_until = []
     self.valid_links = set(valid_links)
+    self.keep_current_section = True
+    self.is_in_heading = False
+    self.section_level = 0
 
     super().__init__()
 
@@ -50,19 +53,26 @@ class PageCleaner(HTMLParser):
     cls = dict(attrs).get('class','')
     role = dict(attrs).get('role','')
     href = dict(attrs).get('href','')
-    
-    if tag in ['script','style','figure'] or \
+
+    self.is_in_heading = tag in ['h1','h2','h3']
+
+    if tag == 'section':
+      self.section_level += 1
+      if self.section_level == 1:
+        self.sections.append("")
+        self.keep_current_section = True
+  
+    if tag in ['script','style','figure', 'map', 'figure-inline'] or \
        role == 'note' or \
        'pagelib_collapse_table_container' in cls or \
        'mw-ref' in  cls or \
-       'thumb' in cls:
+       'thumb' in cls or \
+       'gallery' in cls or \
+       'flagicon' in cls:
       self.inactive_until.append('/' + tag)
-      print(self.inactive_until)
       return
-  
+
     if not self.inactive_until:
-      self.sections.append("")
-    
       if tag not in ['base','meta','link']:
         keep_attrs = ""
         if cls: keep_attrs += ' class="' + cls +'"'
@@ -71,7 +81,7 @@ class PageCleaner(HTMLParser):
         self.sections[-1] += f"<{tag}{keep_attrs}>"
     elif tag == self.inactive_until[-1]:
       del self.inactive_until[-1]
-    elif tag not in ['br', 'img', 'hr', 'wbr', 'meta']:
+    elif tag not in ['br', 'img', 'hr', 'wbr', 'meta', 'area']:
       self.inactive_until.append('/' + tag)
 
   def handle_endtag(self, tag):
@@ -79,8 +89,17 @@ class PageCleaner(HTMLParser):
       self.sections[-1] += f"</{tag}>"
     elif '/' + tag == self.inactive_until[-1]:
       del self.inactive_until[-1]
-    
+
+    if tag == 'section':
+      self.section_level -= 1
+      if self.section_level == 0:
+        if not self.keep_current_section: 
+          del self.sections[-1]
+
   def handle_data(self, data):
+    if self.is_in_heading and data.lower() in ['references','bibliography','external links', 'further reading', 'see also']:
+      self.keep_current_section = False
+  
     if not self.inactive_until:
       self.sections[-1] += data
 
