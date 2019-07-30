@@ -121,7 +121,7 @@ def get_local_html(page,valid_links=[]):
 def save_content(page, valid_links=[]):
   import os.path
 
-  page = urllib.parse.quote(page)
+  page = urllib.parse.quote(page,safe='')
 
   filename = f'articles/{page}'
   if os.path.isfile(filename):
