@@ -7,7 +7,7 @@ vital_article_index = "Wikipedia:Vital_articles"
 api_base = "https://en.wikipedia.org/api/rest_v1/page/mobile-html/"
 
 def get_mobile_html(page):
-  f = urllib.request.urlopen(api_base + page)
+  f = urllib.request.urlopen(api_base + urllib.parse.quote(page))
   
   return f.read().decode('utf-8')
 
@@ -26,6 +26,7 @@ class LinkParser(HTMLParser):
          not 'Talk:' in href and \
          not 'File:' in href and \
          not 'User:' in href and \
+         not 'Template:' in href and \
          not 'Category:' in href:
         self.links.add(href[2:])
 
@@ -118,12 +119,20 @@ def get_local_html(page,valid_links=[]):
   return parser.get_content()
     
 def save_content(page, valid_links=[]):
-  with open(f'articles/{page}', 'w') as f:
-    f.write(get_local_html(page, valid_links=valid_links))
+  import os.path
+
+  filename = f'articles/{page}'
+  if os.path.isfile(filename):
+    print(f'{page} already saved')
+  else:
+    with open(filename, 'w') as f:
+      f.write(get_local_html(page, valid_links=valid_links))
 
 if __name__ == '__main__':
   pages = get_mainspace_links(vital_article_index)
 
   print(f"Found {len(pages)} pages")
 
-  save_content('Tokyo',valid_links=pages)
+  for page in pages:
+    print(f"Saving {page}...")
+    save_content(page, valid_links=pages)
