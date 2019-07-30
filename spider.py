@@ -57,7 +57,7 @@ class PageCleaner(HTMLParser):
     href = dict(attrs).get('href','')
 
     keep_attrs = ""
-    if href and href[2:] in self.valid_links: keep_attrs += ' href="' + href[2:] +'"'
+    if href and href[2:] in self.valid_links: keep_attrs += ' href="' + href[2:] +'.html"'
 
     self.is_in_heading = tag in ['h1','h2','h3']
 
@@ -123,7 +123,7 @@ def save_content(page, valid_links=[]):
 
   page = urllib.parse.quote(page,safe='')
 
-  filename = f'articles/{page}'
+  filename = f'articles/{page}.html'
   if os.path.isfile(filename):
     print(f'{page} already saved')
   else:
