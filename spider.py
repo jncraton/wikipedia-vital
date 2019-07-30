@@ -56,7 +56,6 @@ class PageCleaner(HTMLParser):
     href = dict(attrs).get('href','')
 
     keep_attrs = ""
-    if cls: keep_attrs += ' class="' + cls +'"'
     if href and href[2:] in self.valid_links: keep_attrs += ' href="' + href[2:] +'"'
 
     self.is_in_heading = tag in ['h1','h2','h3']
@@ -66,10 +65,6 @@ class PageCleaner(HTMLParser):
       if self.section_level == 1:
         self.sections.append("")
         self.keep_current_section = True
-
-    if tag in ['span'] or (tag == 'a' and not keep_attrs):
-      self.tags_skipped.append(tag)
-      return
 
     if tag in ['script','style','figure', 'map', 'figure-inline'] or \
        role == 'note' or \
@@ -83,7 +78,9 @@ class PageCleaner(HTMLParser):
       return
 
     if not self.inactive_until:
-      if tag not in ['base','meta','link']:
+      if tag in ['span','div'] or (tag == 'a' and not keep_attrs):
+        self.tags_skipped.append(tag)
+      elif tag not in ['base','meta','link']:
         self.sections[-1] += f"<{tag}{keep_attrs}>"
     elif tag == self.inactive_until[-1]:
       del self.inactive_until[-1]
@@ -91,12 +88,11 @@ class PageCleaner(HTMLParser):
       self.inactive_until.append('/' + tag)
 
   def handle_endtag(self, tag):
-    if self.tags_skipped and self.tags_skipped[-1] == tag:
-      del self.tags_skipped[-1]
-      return
-  
     if not self.inactive_until:
-      self.sections[-1] += f"</{tag}>"
+      if self.tags_skipped and self.tags_skipped[-1] == tag:
+        del self.tags_skipped[-1]
+      else:
+        self.sections[-1] += f"</{tag}>"
     elif '/' + tag == self.inactive_until[-1]:
       del self.inactive_until[-1]
 
