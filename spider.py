@@ -43,6 +43,7 @@ class PageCleaner(HTMLParser):
     self.keep_current_section = True
     self.is_in_heading = False
     self.section_level = 0
+    self.tags_skipped = []
 
     super().__init__()
 
@@ -61,13 +62,18 @@ class PageCleaner(HTMLParser):
       if self.section_level == 1:
         self.sections.append("")
         self.keep_current_section = True
-  
+
+    if tag in ['span']:
+      self.tags_skipped.append(tag)
+      return
+
     if tag in ['script','style','figure', 'map', 'figure-inline'] or \
        role == 'note' or \
        'pagelib_collapse_table_container' in cls or \
        'mw-ref' in  cls or \
        'thumb' in cls or \
        'gallery' in cls or \
+       'noprint' in cls or \
        'flagicon' in cls:
       self.inactive_until.append('/' + tag)
       return
@@ -77,7 +83,7 @@ class PageCleaner(HTMLParser):
         keep_attrs = ""
         if cls: keep_attrs += ' class="' + cls +'"'
         if href and href[2:] in self.valid_links: keep_attrs += ' href="' + href[2:] +'"'
-        
+
         self.sections[-1] += f"<{tag}{keep_attrs}>"
     elif tag == self.inactive_until[-1]:
       del self.inactive_until[-1]
@@ -85,6 +91,10 @@ class PageCleaner(HTMLParser):
       self.inactive_until.append('/' + tag)
 
   def handle_endtag(self, tag):
+    if self.tags_skipped and self.tags_skipped[-1] == tag:
+      del self.tags_skipped[-1]
+      return
+  
     if not self.inactive_until:
       self.sections[-1] += f"</{tag}>"
     elif '/' + tag == self.inactive_until[-1]:
