@@ -7,7 +7,7 @@ vital_article_index = "Wikipedia:Vital_articles"
 api_base = "https://en.wikipedia.org/api/rest_v1/page/mobile-html/"
 
 def get_mobile_html(page):
-  f = urllib.request.urlopen(api_base + urllib.parse.quote(page))
+  f = urllib.request.urlopen(api_base + page)
   
   return f.read().decode('utf-8')
 
@@ -81,7 +81,7 @@ class PageCleaner(HTMLParser):
     if not self.inactive_until:
       if tag in ['span','div', 'section'] or (tag == 'a' and not keep_attrs):
         self.tags_skipped.append(tag)
-      elif tag not in ['base','meta','link']:
+      elif tag not in ['base','meta','link','br']:
         self.sections[-1] += f"<{tag}{keep_attrs}>"
     elif tag == self.inactive_until[-1]:
       del self.inactive_until[-1]
@@ -104,7 +104,7 @@ class PageCleaner(HTMLParser):
           del self.sections[-1]
 
   def handle_data(self, data):
-    if self.is_in_heading and data.lower() in ['references','bibliography','external links', 'further reading', 'see also']:
+    if self.is_in_heading and data.lower() in ['references','bibliography','external links', 'further reading', 'see also','gallery']:
       self.keep_current_section = False
   
     if not self.inactive_until:
@@ -120,6 +120,8 @@ def get_local_html(page,valid_links=[]):
     
 def save_content(page, valid_links=[]):
   import os.path
+
+  page = urllib.parse.quote(page)
 
   filename = f'articles/{page}'
   if os.path.isfile(filename):
