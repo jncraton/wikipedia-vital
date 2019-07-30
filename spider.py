@@ -111,7 +111,7 @@ class PageCleaner(HTMLParser):
       self.keep_current_section = False
   
     if not self.inactive_until:
-      self.sections[-1] += data
+      self.sections[-1] += data.replace('\n','')
 
 def get_local_html(page,valid_links=[]):
   parser = PageCleaner(valid_links=valid_links)
