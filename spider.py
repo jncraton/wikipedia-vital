@@ -134,12 +134,12 @@ def save_content(page, valid_links=[]):
 
 def create_index(pages):
   with open("articles/index.html", 'w') as f:
-    f.write("<!DOCTYPE html><html><head><title>Carbon dioxide</title></head><body><header><h1>Wikipedia Vital Articles</h1></header><ul>")
+    f.write('<!DOCTYPE html><html><head><meta charset="utf-8"><title>Carbon dioxide</title></head><body><header><h1>Wikipedia Vital Articles</h1></header><ul>')
 
     for page in sorted(pages):
       f.write(f'<li><a href="{page}.html">{page}</a>')
 
-    f.write("</ul></body></html>")
+    f.write('</ul></body></html>')
 
 if __name__ == '__main__':
   pages = get_mainspace_links(vital_article_index)
