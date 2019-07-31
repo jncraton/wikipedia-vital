@@ -83,6 +83,8 @@ class PageCleaner(HTMLParser):
         self.tags_skipped.append(tag)
       elif tag not in ['base','meta','link','br']:
         self.sections[-1] += f"<{tag}{keep_attrs}>"
+        if tag == 'head':
+          self.sections[-1] += '<meta charset="utf-8">'
     elif tag == self.inactive_until[-1]:
       del self.inactive_until[-1]
     elif tag not in ['br', 'img', 'hr', 'wbr', 'meta', 'area']:
