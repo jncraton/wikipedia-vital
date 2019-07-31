@@ -132,6 +132,15 @@ def save_content(page, valid_links=[]):
     with open(filename, 'w') as f:
       f.write(get_local_html(page, valid_links=valid_links))
 
+def create_index(pages):
+  with open("articles/index.html", 'w') as f:
+    f.write("<!DOCTYPE html><html><head><title>Carbon dioxide</title></head><body><header><h1>Wikipedia Vital Articles</h1></header><ul>")
+
+    for page in sorted(pages):
+      f.write(f'<li><a href="{page}.html">{page}</a>')
+
+    f.write("</ul></body></html>")
+
 if __name__ == '__main__':
   pages = get_mainspace_links(vital_article_index)
 
@@ -143,3 +152,5 @@ if __name__ == '__main__':
     print(f"Saving {page}...")
     save_content(page, valid_links=pages)
     sleep(0.1)
+
+  create_index(pages)  

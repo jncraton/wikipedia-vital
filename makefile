@@ -1,7 +1,7 @@
 all: wikipedia-vital.zim
 
 wikipedia-vital.zim: articles zimwriterfs
-	./zimwriterfs -f logo.png -w Philosophy.html -l en -t "Vital Wikipedia" -d Wikipedia -c Wikipedia -p jncraton -i articles wikipedia-vital.zim
+	./zimwriterfs -f logo.png -w index.html -l en -t "Vital Wikipedia" -d Wikipedia -c Wikipedia -p jncraton -i articles wikipedia-vital.zim
 
 articles:
 	mkdir -p articles
