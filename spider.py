@@ -75,6 +75,7 @@ class PageCleaner(HTMLParser):
        'mw-ref' in  cls or \
        'thumb' in cls or \
        'gallery' in cls or \
+       'ambox' in cls or \
        'noprint' in cls or \
        'flagicon' in cls:
       self.inactive_until.append('/' + tag)
