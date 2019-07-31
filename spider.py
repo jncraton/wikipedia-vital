@@ -6,6 +6,8 @@ from html.parser import HTMLParser
 vital_article_index = "Wikipedia:Vital_articles"
 api_base = "https://en.wikipedia.org/api/rest_v1/page/mobile-html/"
 
+default_head = '<meta charset="utf-8"><style>body{max-width:800px;margin:0 auto}</style><meta name="viewport" content="width=device-width, initial-scale=1">'
+
 def get_mobile_html(page):
   f = urllib.request.urlopen(urllib.request.Request(api_base + page, headers={'User-Agent': 'wikipedia-vital'}))
   
@@ -84,7 +86,7 @@ class PageCleaner(HTMLParser):
       elif tag not in ['base','meta','link','br']:
         self.sections[-1] += f"<{tag}{keep_attrs}>"
         if tag == 'head':
-          self.sections[-1] += '<meta charset="utf-8">'
+          self.sections[-1] += default_head
     elif tag == self.inactive_until[-1]:
       del self.inactive_until[-1]
     elif tag not in ['br', 'img', 'hr', 'wbr', 'meta', 'area']:
@@ -134,7 +136,7 @@ def save_content(page, valid_links=[]):
 
 def create_index(pages):
   with open("articles/index.html", 'w') as f:
-    f.write('<!DOCTYPE html><html><head><meta charset="utf-8"><title>Carbon dioxide</title></head><body><header><h1>Wikipedia Vital Articles</h1></header><ul>')
+    f.write(f'<!DOCTYPE html><html><head>{default_head}<title>Wikipedia Vital Articles</title></head><body><header><h1>Wikipedia Vital Articles</h1></header><ul>')
 
     for page in sorted(pages):
       f.write(f'<li><a href="{page}.html">{page}</a>')
