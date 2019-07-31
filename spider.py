@@ -106,7 +106,7 @@ class PageCleaner(HTMLParser):
           del self.sections[-1]
 
   def handle_data(self, data):
-    if self.is_in_heading and data.lower() in ['references','bibliography','external links', 'further reading', 'see also','gallery']:
+    if self.is_in_heading and data.lower() in ['notes','references','bibliography','external links','further reading','see also','gallery']:
       self.keep_current_section = False
   
     if not self.inactive_until:
