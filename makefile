@@ -14,3 +14,4 @@ zimwriterfs:
 
 clean:
 	rm -rf articles
+	rm -f wikipedia-vital.zim
