@@ -90,7 +90,7 @@ class PageCleaner(HTMLParser):
           self.sections[-1] += default_head
     elif tag == self.inactive_until[-1]:
       del self.inactive_until[-1]
-    elif tag not in ['br', 'img', 'hr', 'wbr', 'meta', 'area']:
+    elif tag not in ['br', 'img', 'hr', 'wbr', 'meta', 'area','track', 'source']:
       self.inactive_until.append('/' + tag)
 
   def handle_endtag(self, tag):
