@@ -1,6 +1,8 @@
 import urllib.request
 import urllib.parse
 
+import re
+
 from html.parser import HTMLParser
 
 vital_article_index = "Wikipedia:Vital_articles"
@@ -135,19 +137,21 @@ def save_content(page, valid_links=[]):
     with open(filename, 'w') as f:
       f.write(get_local_html(page, valid_links=valid_links))
 
-def create_index(pages):
+def create_index(valid_links):
   with open("articles/index.html", 'w') as f:
-    f.write(f'<!DOCTYPE html><html><head>{default_head}<title>Wikipedia Vital Articles</title></head><body><header><h1>Wikipedia Vital Articles</h1></header><ul>')
-
-    for page in sorted(pages):
-      f.write(f'<li><a href="{page}.html">{page}</a>')
-
-    f.write('</ul></body></html>')
+    html = get_local_html(vital_article_index, valid_links=valid_links)
+    html = re.sub('<(table|tbody|thead|td|tr|th)\/*>', '', html, flags=re.I)
+    html = re.sub('<p.*?\/p>', '', html, flags=re.I|re.DOTALL|re.M)
+    html = re.sub('<\/header>.*?<h2>People', '</header><h2>People', html, flags=re.I|re.DOTALL|re.M)
+    html = re.sub('<h1>View Counts.*?<\/body>', '</body>', html, flags=re.I|re.DOTALL|re.M)
+    f.write(html)
 
 if __name__ == '__main__':
   pages = get_mainspace_links(vital_article_index)
 
   print(f"Found {len(pages)} pages")
+
+  create_index(pages)  
 
   from time import sleep
 
@@ -155,5 +159,3 @@ if __name__ == '__main__':
     print(f"Saving {page}...")
     save_content(page, valid_links=pages)
     sleep(0.1)
-
-  create_index(pages)  
