@@ -25,7 +25,7 @@ ignored_namespaces = [
     "Category:",
 ]
 
-ignored_tags = ["script", "style", "figure", "map", "figure-inline"]
+ignored_tags = ["script", "style", "figure", "map", "figure-inline", "annotation"]
 
 ignored_classes = [
     "pagelib_collapse_table_container",
