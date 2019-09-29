@@ -140,7 +140,7 @@ class PageCleaner(HTMLParser):
 
     def get_content(self):
         content = "".join(self.sections)
-        content = re.sub('>\s+<', '><', content, flags=re.M)
+        content = re.sub(">\s+<", "><", content, flags=re.M)
         return content
 
     def handle_starttag(self, tag, attrs):
