@@ -23,11 +23,45 @@ ignored_namespaces = [
     "Category:",
 ]
 
+ignored_tags = ["script", "style", "figure", "map", "figure-inline"]
 
-def get_mobile_html(page):
-    f = urllib.request.urlopen(urllib.request.Request(api_base + page, headers=headers))
+ignored_classes = [
+    "pagelib_collapse_table_container",
+    "mw-ref",
+    "thumb",
+    "gallery",
+    "ambox",
+    "noprint",
+    "flagicon",
+]
 
-    return f.read().decode("utf-8")
+ignored_roles = ["note"]
+
+
+def is_tag_ignored(tag, cls="", role=""):
+    """ Returns True if a tag should be ignored
+
+    >>> is_tag_ignored("script")
+    True
+
+    >>> is_tag_ignored("p")
+    False
+
+    >>> is_tag_ignored("div", "alignright ambox important")
+    True
+
+    >>> is_tag_ignored("div", "noborder")
+    False
+
+    >>> is_tag_ignored("div", "", "note")
+    True
+    """
+
+    return (
+        tag in ignored_tags
+        or role in ignored_roles
+        or any(c in cls for c in ignored_classes)
+    )
 
 
 def is_mainspace(url):
@@ -47,6 +81,12 @@ def is_mainspace(url):
         return False
 
     return not any([ns in url for ns in ignored_namespaces])
+
+
+def get_mobile_html(page):
+    f = urllib.request.urlopen(urllib.request.Request(api_base + page, headers=headers))
+
+    return f.read().decode("utf-8")
 
 
 class LinkParser(HTMLParser):
@@ -81,16 +121,18 @@ class PageCleaner(HTMLParser):
 
         super().__init__()
 
+    def is_valid_page(self, url):
+        return url and url[2:] in self.valid_links
+
     def get_content(self):
         return "".join(self.sections)
 
     def handle_starttag(self, tag, attrs):
-        cls = dict(attrs).get("class", "")
-        role = dict(attrs).get("role", "")
         href = dict(attrs).get("href", "")
 
         keep_attrs = ""
-        if href and href[2:] in self.valid_links:
+
+        if self.is_valid_page(href):
             keep_attrs += ' href="' + href[2:] + '.html"'
 
         self.is_in_heading = tag in ["h1", "h2", "h3"]
@@ -101,17 +143,10 @@ class PageCleaner(HTMLParser):
                 self.sections.append("")
                 self.keep_current_section = True
 
-        if (
-            tag in ["script", "style", "figure", "map", "figure-inline"]
-            or role == "note"
-            or "pagelib_collapse_table_container" in cls
-            or "mw-ref" in cls
-            or "thumb" in cls
-            or "gallery" in cls
-            or "ambox" in cls
-            or "noprint" in cls
-            or "flagicon" in cls
-        ):
+        cls = dict(attrs).get("class", "")
+        role = dict(attrs).get("role", "")
+
+        if is_tag_ignored(tag, cls, role):
             self.inactive_until.append("/" + tag)
             return
 
