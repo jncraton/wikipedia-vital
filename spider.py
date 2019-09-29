@@ -139,7 +139,9 @@ class PageCleaner(HTMLParser):
         return url and url[2:] in self.valid_links
 
     def get_content(self):
-        return "".join(self.sections)
+        content = "".join(self.sections)
+        content = re.sub('>\s+<', '><', content, flags=re.M)
+        return content
 
     def handle_starttag(self, tag, attrs):
         href = dict(attrs).get("href", "")
