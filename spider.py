@@ -37,6 +37,18 @@ ignored_classes = [
 
 ignored_roles = ["note"]
 
+ignored_sections = [
+    "notes",
+    "references",
+    "bibliography",
+    "external links",
+    "further reading",
+    "see also",
+    "gallery",
+    "footnotes",
+    "sources",
+]
+
 
 def is_tag_ignored(tag, cls="", role=""):
     """ Returns True if a tag should be ignored
@@ -178,17 +190,7 @@ class PageCleaner(HTMLParser):
                     del self.sections[-1]
 
     def handle_data(self, data):
-        if self.is_in_heading and data.lower() in [
-            "notes",
-            "references",
-            "bibliography",
-            "external links",
-            "further reading",
-            "see also",
-            "gallery",
-            "footnotes",
-            "sources",
-        ]:
+        if self.is_in_heading and data.lower() in ignored_sections:
             self.keep_current_section = False
 
         if not self.inactive_until:
