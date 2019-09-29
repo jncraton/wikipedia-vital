@@ -15,7 +15,8 @@ default_head = \
 '<meta name="viewport" content="width=device-width, initial-scale=1">'
 
 def get_mobile_html(page):
-  f = urllib.request.urlopen(urllib.request.Request(api_base + page, headers=headers))
+  f = urllib.request.urlopen(
+      urllib.request.Request(api_base + page, headers=headers))
   
   return f.read().decode('utf-8')
 
