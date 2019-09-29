@@ -1,7 +1,9 @@
+from time import sleep
+import os.path
+import re
+
 import urllib.request
 import urllib.parse
-
-import re
 
 from html.parser import HTMLParser
 
@@ -207,8 +209,6 @@ def get_local_html(page, valid_links=[]):
 
 
 def save_content(page, valid_links=[]):
-    import os.path
-
     page = urllib.parse.quote(page, safe="")
 
     filename = f"articles/{page}.html"
@@ -242,8 +242,6 @@ if __name__ == "__main__":
     print(f"Found {len(pages)} pages")
 
     create_index(pages)
-
-    from time import sleep
 
     for page in pages:
         print(f"Saving {page}...")
