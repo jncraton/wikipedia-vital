@@ -11,9 +11,11 @@ vital_article_index = "Wikipedia:Vital_articles"
 api_base = "https://en.wikipedia.org/api/rest_v1/page/mobile-html/"
 headers = {"User-Agent": "wikipedia-vital"}
 
-default_head = '<meta charset="utf-8">'
-"<style>body{max-width:800px;margin:0 auto;padding:0 1em;}</style>"
-'<meta name="viewport" content="width=device-width, initial-scale=1">'
+default_head = (
+    '<meta charset="utf-8">'
+    "<style>body{max-width:800px;margin:0 auto;padding:0 1em;}</style>"
+    '<meta name="viewport" content="width=device-width, initial-scale=1">'
+)
 
 ignored_namespaces = [
     "Wikipedia:",
