@@ -13,11 +13,40 @@ default_head = '<meta charset="utf-8">'
 "<style>body{max-width:800px;margin:0 auto;padding:0 1em;}</style>"
 '<meta name="viewport" content="width=device-width, initial-scale=1">'
 
+ignored_namespaces = [
+    "Wikipedia:",
+    "Wikipedia_talk:",
+    "Talk:",
+    "File:",
+    "User:",
+    "Template:",
+    "Category:",
+]
+
 
 def get_mobile_html(page):
     f = urllib.request.urlopen(urllib.request.Request(api_base + page, headers=headers))
 
     return f.read().decode("utf-8")
+
+
+def is_mainspace(url):
+    """ Returns True if URL points to a mainspace page
+
+    >>> is_mainspace("./Physics")
+    True
+
+    >>> is_mainspace("./Wikipedia:NPV")
+    False
+
+    >>> is_mainspace("Physics")
+    False
+    """
+
+    if not url.startswith("./"):
+        return False
+
+    return not any([ns in url for ns in ignored_namespaces])
 
 
 class LinkParser(HTMLParser):
@@ -29,16 +58,7 @@ class LinkParser(HTMLParser):
     def handle_starttag(self, tag, attrs):
         if tag == "a":
             href = dict(attrs)["href"]
-            if (
-                href.startswith("./")
-                and not "Wikipedia:" in href
-                and not "Wikipedia_talk:" in href
-                and not "Talk:" in href
-                and not "File:" in href
-                and not "User:" in href
-                and not "Template:" in href
-                and not "Category:" in href
-            ):
+            if is_mainspace(href):
                 self.links.add(href[2:])
 
 
