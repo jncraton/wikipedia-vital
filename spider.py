@@ -7,9 +7,22 @@ import urllib.parse
 
 from html.parser import HTMLParser
 
-vital_article_index = "Wikipedia:Vital_articles"
+vital_article_indices = [
+    "Wikipedia:Vital_articles/Level/4/People",
+    "Wikipedia:Vital_articles/Level/4/History",
+    "Wikipedia:Vital_articles/Level/4/Geography",
+    "Wikipedia:Vital_articles/Level/4/Arts",
+    "Wikipedia:Vital_articles/Level/4/Philosophy_and_religion",
+    "Wikipedia:Vital_articles/Level/4/Everyday_life",
+    "Wikipedia:Vital_articles/Level/4/Society_and_social_sciences",
+    "Wikipedia:Vital_articles/Level/4/Biology_and_health_sciences",
+    "Wikipedia:Vital_articles/Level/4/Physical_sciences",
+    "Wikipedia:Vital_articles/Level/4/Technology",
+    "Wikipedia:Vital_articles/Level/4/Mathematics",
+]
+
 api_base = "https://en.wikipedia.org/api/rest_v1/page/mobile-html/"
-headers = {"User-Agent": "wikipedia-vital"}
+headers = {"User-Agent": "wikipedia-vital-10k"}
 
 default_head = (
     '<meta charset="utf-8">'
@@ -100,6 +113,8 @@ def is_mainspace(url):
 
 
 def get_mobile_html(page):
+    page = urllib.parse.quote(page, safe='')
+
     f = urllib.request.urlopen(urllib.request.Request(api_base + page, headers=headers))
 
     return f.read().decode("utf-8")
@@ -225,25 +240,15 @@ def save_content(page, valid_links=[]):
 
 def create_index(valid_links):
     with open("articles/index.html", "w") as f:
-        html = get_local_html(vital_article_index, valid_links=valid_links)
-        html = re.sub("<(table|tbody|thead|td|tr|th)\/*>", "", html, flags=re.I)
-        html = re.sub("<p.*?\/p>", "", html, flags=re.I | re.DOTALL | re.M)
-        html = re.sub(
-            "<\/header>.*?<h2>People",
-            "</header><h2>People",
-            html,
-            flags=re.I | re.DOTALL | re.M,
-        )
-        html = re.sub(
-            "<h1>View Counts.*?<\/body>", "</body>", html, flags=re.I | re.DOTALL | re.M
-        )
-        f.write(html)
+        f.write("Wikipedia Vital 10k")
 
 
 if __name__ == "__main__":
-    pages = get_mainspace_links(vital_article_index)
+    pages = []
 
-    print(f"Found {len(pages)} pages")
+    for idx in vital_article_indices:
+        pages += get_mainspace_links(idx)
+        print(f"Added pages from {idx} (new total: {len(pages)}")
 
     create_index(pages)
 
