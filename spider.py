@@ -246,10 +246,16 @@ if __name__ == "__main__":
 
     for idx in vital_article_indices:
         pages += get_mainspace_links(idx)
-        print(f"Added pages from {idx} (new total: {len(pages)}")
+        print(f"Added pages from {idx} (new total: {len(pages)})")
 
     create_index(pages)
 
-    for i, page in enumerate(pages):
+    from multiprocessing import Pool
+
+    def f(page):
+        i, page = page
         print(f"Saving {page} ({i}/{len(pages)})...")
         save_content(page, valid_links=pages)
+
+    with Pool(8) as p:
+        p.map(f, enumerate(pages))
