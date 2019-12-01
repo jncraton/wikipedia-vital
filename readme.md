@@ -1,7 +1,7 @@
 wikipedia-vital
 ===============
 
-[![Netlify Status](https://api.netlify.com/api/v1/badges/15054aa9-a138-43da-ba23-d334d7c7e3d1/deploy-status)](https://app.netlify.com/sites/wikipedia-vital/deploys)
+[![Netlify Status](https://api.netlify.com/api/v1/badges/2a7a45ca-167c-44b8-a0ee-a7c6befa74e2/deploy-status)](https://app.netlify.com/sites/wikipedia-vital-10k/deploys)
 
 Downloads the articles listed on [Wikipedia:Vital Articles](https://en.wikipedia.org/wiki/Wikipedia:Vital_articles) and saves them as basic HTML and a Kiwix zim file.
 
