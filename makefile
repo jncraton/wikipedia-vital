@@ -1,8 +1,8 @@
-all: test wikipedia-vital.zim
+all: test wikipedia-vital-10k.zim
 
-wikipedia-vital.zim: articles zimwriterfs
-	./zimwriterfs -f logo.png -w index.html -l en -t "Vital Wikipedia" -d Wikipedia -c Wikipedia -p jncraton -i articles wikipedia-vital.zim
-	ls -lah wikipedia-vital.zim
+wikipedia-vital-10k.zim: articles zimwriterfs
+	./zimwriterfs -f logo.png -w index.html -l en -t "Vital Wikipedia 10k" -d Wikipedia -c Wikipedia -p jncraton -i articles wikipedia-vital-10k.zim
+	ls -lah wikipedia-vital-10k.zim
 
 articles:
 	mkdir -p articles
