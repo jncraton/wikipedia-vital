@@ -20,5 +20,5 @@ test:
 
 clean:
 	rm -rf articles
-	rm -f wikipedia-vital.zim
+	rm -f *.zim
 	rm -f zimwriterfs
