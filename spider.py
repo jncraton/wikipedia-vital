@@ -228,7 +228,7 @@ def get_local_html(page, valid_links=[]):
 
 
 def save_content(page, valid_links=[]):
-    filename = f"articles/{page}.html"
+    filename = f"articles/{page.replace('/','%2F')}.html"
     if os.path.isfile(filename):
         print(f"{page} already saved")
     else:
