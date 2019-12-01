@@ -228,8 +228,6 @@ def get_local_html(page, valid_links=[]):
 
 
 def save_content(page, valid_links=[]):
-    page = urllib.parse.quote(page, safe="")
-
     filename = f"articles/{page}.html"
     if os.path.isfile(filename):
         print(f"{page} already saved")
@@ -255,4 +253,3 @@ if __name__ == "__main__":
     for page in pages:
         print(f"Saving {page}...")
         save_content(page, valid_links=pages)
-        sleep(0.1)
