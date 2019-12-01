@@ -222,8 +222,6 @@ def get_local_html(page, valid_links=[]):
     parser = PageCleaner(valid_links=valid_links)
     parser.feed(get_mobile_html(page))
 
-    print(f"{len(parser.get_content())} bytes for {page}")
-
     return parser.get_content()
 
 
