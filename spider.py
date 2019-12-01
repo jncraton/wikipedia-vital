@@ -250,6 +250,6 @@ if __name__ == "__main__":
 
     create_index(pages)
 
-    for page in pages:
-        print(f"Saving {page}...")
+    for i, page in enumerate(pages):
+        print(f"Saving {page} ({i}/{len(pages)})...")
         save_content(page, valid_links=pages)
