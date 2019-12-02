@@ -7,6 +7,9 @@ import urllib.parse
 
 from html.parser import HTMLParser
 
+level4 = True
+
+vital_article_index = "Wikipedia:Vital_articles"
 vital_article_indices = [
     "Wikipedia:Vital_articles/Level/4/People",
     "Wikipedia:Vital_articles/Level/4/History",
@@ -236,17 +239,32 @@ def save_content(page, valid_links=[]):
 
 def create_index(valid_links):
     with open("articles/index.html", "w") as f:
-        f.write("Wikipedia Vital 10k")
-
+        html = get_local_html(vital_article_index, valid_links=valid_links)
+        html = re.sub("<(table|tbody|thead|td|tr|th)\/*>", "", html, flags=re.I)
+        html = re.sub("<p.*?\/p>", "", html, flags=re.I | re.DOTALL | re.M)
+        html = re.sub(
+            "<\/header>.*?<h2>People",
+            "</header><h2>People",
+            html,
+            flags=re.I | re.DOTALL | re.M,
+        )
+        html = re.sub(
+            "<h1>View Counts.*?<\/body>", "</body>", html, flags=re.I | re.DOTALL | re.M
+        )
+        f.write(html)
 
 if __name__ == "__main__":
-    pages = []
-
-    for idx in vital_article_indices:
-        pages += get_mainspace_links(idx)
-        print(f"Added pages from {idx} (new total: {len(pages)})")
-
+    print("Collecting level 3 page titles and generating index...")
+    pages = get_mainspace_links(vital_article_index)
     create_index(pages)
+
+    if level4:
+        print("Collecting level 4 page titles")
+        for idx in vital_article_indices:
+            pages = pages.union(get_mainspace_links(idx))
+            print(f"Added pages from {idx} (new total: {len(pages)})")
+
+    print(f"Total pages without duplicates: {len(pages)}")
 
     from multiprocessing import Pool
 
