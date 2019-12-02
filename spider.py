@@ -7,7 +7,7 @@ import urllib.parse
 
 from html.parser import HTMLParser
 
-level4 = True
+level4 = False
 
 vital_article_index = "Wikipedia:Vital_articles"
 vital_article_indices = [
