@@ -1,4 +1,4 @@
-all: test wikipedia-vital-10k.zim
+all: test wikipedia-vital.zim
 
 wikipedia-vital.zim: articles zimwriterfs
 	./zimwriterfs -f logo.png -w index.html -l en -t "Vital Wikipedia 10k" -d Wikipedia -c Wikipedia -p jncraton -i articles $@
