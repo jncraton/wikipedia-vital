@@ -47,6 +47,7 @@ ignored_tags = ["script", "style", "figure", "map", "figure-inline", "annotation
 
 ignored_classes = [
     "pagelib_collapse_table_container",
+    "pcs-collapse-table-container",
     "mw-ref",
     "thumb",
     "gallery",
