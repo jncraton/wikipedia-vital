@@ -270,7 +270,12 @@ if __name__ == "__main__":
     def f(page):
         i, page = page
         print(f"Saving {page} ({i}/{len(pages)})...")
-        save_content(page, valid_links=pages)
+        for retries in range(3):
+            try:
+                save_content(page, valid_links=pages)
+                break
+            except:
+                pass
 
     with Pool(8) as p:
         p.map(f, enumerate(pages))
