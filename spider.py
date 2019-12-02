@@ -25,7 +25,7 @@ vital_article_indices = [
 ]
 
 api_base = "https://en.wikipedia.org/api/rest_v1/page/mobile-html/"
-headers = {"User-Agent": "wikipedia-vital-10k"}
+headers = {"User-Agent": "wikipedia-vital"}
 
 default_head = (
     '<meta charset="utf-8">'
@@ -116,8 +116,6 @@ def is_mainspace(url):
 
 
 def get_mobile_html(page):
-    page = urllib.parse.quote(page, safe='')
-
     f = urllib.request.urlopen(urllib.request.Request(api_base + page, headers=headers))
 
     return f.read().decode("utf-8")
@@ -252,6 +250,7 @@ def create_index(valid_links):
             "<h1>View Counts.*?<\/body>", "</body>", html, flags=re.I | re.DOTALL | re.M
         )
         f.write(html)
+
 
 if __name__ == "__main__":
     print("Collecting level 3 page titles and generating index...")
