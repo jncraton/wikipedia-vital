@@ -72,7 +72,7 @@ ignored_sections = [
 
 
 def is_tag_ignored(tag, cls="", role=""):
-    """ Returns True if a tag should be ignored
+    """Returns True if a tag should be ignored
 
     >>> is_tag_ignored("script")
     True
@@ -98,7 +98,7 @@ def is_tag_ignored(tag, cls="", role=""):
 
 
 def is_mainspace(url):
-    """ Returns True if URL points to a mainspace page
+    """Returns True if URL points to a mainspace page
 
     >>> is_mainspace("./Physics")
     True
