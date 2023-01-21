@@ -238,18 +238,12 @@ def save_content(page, valid_links=[]):
 
 def create_index(valid_links):
     with open("articles/index.html", "w") as f:
-        html = get_local_html(vital_article_index, valid_links=valid_links)
-        html = re.sub("<(table|tbody|thead|td|tr|th)\/*>", "", html, flags=re.I)
-        html = re.sub("<p.*?\/p>", "", html, flags=re.I | re.DOTALL | re.M)
-        html = re.sub(
-            "<\/header>.*?<h2>People",
-            "</header><h2>People",
-            html,
-            flags=re.I | re.DOTALL | re.M,
-        )
-        html = re.sub(
-            "<h1>View Counts.*?<\/body>", "</body>", html, flags=re.I | re.DOTALL | re.M
-        )
+        with open('template.html') as template:
+            html = template.read()
+            
+        pages = sorted(list(valid_links))
+        anchors = [f'<a href="{l}">{l}</a>' for l in pages]
+        html = html.replace('{{ pages }}', '<li>' + '<li>'.join(anchors))
         f.write(html)
 
 
