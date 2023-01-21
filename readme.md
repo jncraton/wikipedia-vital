@@ -11,4 +11,4 @@ https://wikipedia-vital.netlify.com/articles/
 
 The zim file is available here:
 
-https://wikipedia-vital.netlify.com/wikipedia-vital-10k.zim
+https://wikipedia-vital.netlify.com/wikipedia-vital.zim
