@@ -10,8 +10,8 @@ articles:
 	python3 spider.py
 
 zimwriterfs:
-	wget --quiet https://download.openzim.org/release/zimwriterfs/zimwriterfs_linux-x86_64-1.3.3.tar.gz
-	tar -xvf zimwriterfs_linux-x86_64-1.3.3.tar.gz --strip=1
+	wget --quiet https://download.openzim.org/release/zim-tools/zim-tools_linux-x86_64-3.1.3.tar.gz
+	tar -xvf zim-tools_linux-x86_64-3.1.3.tar.gz --strip=1
 
 test:
 	python3 -m doctest spider.py
@@ -19,4 +19,4 @@ test:
 clean:
 	rm -rf articles
 	rm -f *.zim
-	rm -f zimwriterfs
+	rm -f zim*
