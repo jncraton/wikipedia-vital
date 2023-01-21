@@ -242,7 +242,7 @@ def create_index(valid_links):
             html = template.read()
 
         pages = sorted(list(valid_links))
-        anchors = [f'<a href="{l}">{l}</a>' for l in pages]
+        anchors = [f'<a href="{l}.html">{l}</a>' for l in pages]
         html = html.replace("{{ pages }}", "<li>" + "<li>".join(anchors))
         f.write(html)
 
