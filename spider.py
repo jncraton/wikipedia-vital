@@ -238,12 +238,12 @@ def save_content(page, valid_links=[]):
 
 def create_index(valid_links):
     with open("articles/index.html", "w") as f:
-        with open('template.html') as template:
+        with open("template.html") as template:
             html = template.read()
-            
+
         pages = sorted(list(valid_links))
         anchors = [f'<a href="{l}">{l}</a>' for l in pages]
-        html = html.replace('{{ pages }}', '<li>' + '<li>'.join(anchors))
+        html = html.replace("{{ pages }}", "<li>" + "<li>".join(anchors))
         f.write(html)
 
 
