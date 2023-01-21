@@ -1,7 +1,7 @@
 all: test wikipedia-vital.zim
 
 wikipedia-vital.zim: articles zimwriterfs
-	./zimwriterfs -f logo.png -w index.html -l en -t "Vital Wikipedia" -d Wikipedia -c Wikipedia -p jncraton -i articles $@
+	./zimwriterfs --illustration logo.png --welcome index.html --language en --title "Vital Wikipedia" --description Wikipedia --creator Wikipedia --publisher jncraton -i articles $@
 	ls -lah $@
 
 articles:
